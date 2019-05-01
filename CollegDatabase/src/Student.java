@@ -6,6 +6,9 @@
  * @author Deyonta
  *
  */
+
+import java.sql.*;  
+
  
 public class Student {
 	private String firstName;
