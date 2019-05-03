@@ -7,7 +7,9 @@
  *
  */
 
-import java.sql.*;  
+import java.sql.*;
+
+import javax.swing.JOptionPane;  
 
  
 public class Student {
@@ -55,36 +57,52 @@ public class Student {
 	}
 
 	/** Accessors
-	 * @return **/
+	 * @return 
+	 * @throws SQLException **/
 	
-	public String getfirstName() {
+	public String getfirstName() throws SQLException {
+	/**	try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/studentData","root","");  
+			//JOptionPane.showMessageDialog(null, "Connected to Database...");
+			String command = "SELECT";
+			
+			Statement statement = con.createStatement(); //java statement
+			
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Error connecting to Database to retieve first name...");
+
+		}  **/
 		return "";
 	}
 	
-	public String getlastName() {
+	public String getlastName() throws SQLException {
 		return "";
 	}
 	
-	public String getMiddleInitial() {
+	public String getMiddleInitial() throws SQLException {
 		return "";
 	}
 	
-	public void getAddress() {
+	public void getAddress() throws SQLException {
 		return;
 	}
 	
-	public void getMajor() {
+	public void getMajor() throws SQLException {
 		return;
 	}
 	
-	public void getMinor() {
+	public void getMinor() throws SQLException {
 		return ;
 	}
-	public void getStudentID() {
+	
+	public void getStudentID() throws SQLException {
 		return;
 	}
 	
-	public void getEmail() {
+	public void getEmail() throws SQLException {
 		return;
 	}
 
@@ -113,6 +131,7 @@ public class Student {
 	public void setMinor(String a) {
 		minor = a;
 	}
+	
 	public void setStudentID(String a) {
 		StudentIDnumber = a;
 	}

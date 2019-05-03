@@ -25,8 +25,40 @@ public class CollegeDatbase {
 		//connect to mysql database
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/studentData","","");  
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/studentData","root","");  
 			JOptionPane.showMessageDialog(null, "Connected to Database...");
+			
+			JOptionPane.showMessageDialog(null, "Looking for txt file to enter info into database");
+			//read file with the Student Information which should be the
+			//first name, last name, middle initial, address,  minor,   StudentID and email
+			String file ="info.txt";
+			Scanner reader = new Scanner(file);
+			while(reader.hasNext()) {
+				
+				String first = reader.next();
+				String last = reader.next(); 
+				String middle  = reader.next();
+				String address = reader.next();
+				String minor = reader.next();
+				String id = generateStudentID();
+				String email = genereateEmail(first, middle, last);
+				
+				
+		/**		Student student1 = new Student();
+				student1.setfirstName(reader.next());
+				student1.setlastName(reader.next());
+				student1.setAddress(reader.next());
+				student1.setMajor(reader.next());
+				student1.setMinor(reader.next());
+				//generate the studentID
+				student1.setStudentID(generateStudentID());
+				//generate the student email
+				student1.setEmail( (genereateEmail(student1.getfirstName(), student1.getMiddleInitial(), student1.getlastName())) );
+			**/
+				
+			}
+			con.close();
+			
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -34,24 +66,6 @@ public class CollegeDatbase {
 
 		}  
 		
-		JOptionPane.showMessageDialog(null, "Looking for Txt file to enter info into database");
-		//read file with the Student Information which should be the
-		//first name, last name, address, major and minor
-		String file ="info.txt";
-		Scanner reader = new Scanner(file);
-		while(reader.hasNext()) {
-			//create new student
-			Student student1 = new Student();
-			student1.setfirstName(reader.next());
-			student1.setlastName(reader.next());
-			student1.setAddress(reader.next());
-			student1.setMajor(reader.next());
-			student1.setMinor(reader.next());
-			//generate the studentID
-			student1.setStudentID(generateStudentID());
-			//generate the student email
-			student1.setEmail( (genereateEmail(student1.getfirstName(), student1.getMiddleInitial(), student1.getlastName())) );
-		}
 		
 
 	}//end of main
