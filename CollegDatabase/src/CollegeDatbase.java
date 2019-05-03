@@ -27,10 +27,12 @@ public class CollegeDatbase {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/studentData","root","");  
 			JOptionPane.showMessageDialog(null, "Connected to Database...");
+			Statement statement = con.createStatement();
 			
 			JOptionPane.showMessageDialog(null, "Looking for txt file to enter info into database");
 			//read file with the Student Information which should be the
 			//first name, last name, middle initial, address,  minor,   StudentID and email
+			
 			String file ="info.txt";
 			Scanner reader = new Scanner(file);
 			while(reader.hasNext()) {
@@ -42,7 +44,7 @@ public class CollegeDatbase {
 				String minor = reader.next();
 				String id = generateStudentID();
 				String email = genereateEmail(first, middle, last);
-				
+				statement.executeUpdate("");
 				
 		/**		Student student1 = new Student();
 				student1.setfirstName(reader.next());
