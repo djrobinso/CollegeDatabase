@@ -3,7 +3,7 @@
  */
 import java.util.Random;
 import java.util.Scanner;
-import javax.swing.JOptionPane;
+
 import javax.swing.*;
 
 import java.awt.event.ActionEvent;
@@ -32,7 +32,9 @@ public class CollegeDatbase {
 	 */
 	public static void main(String[] args){
 		// TODO Auto-generated method stub
-		JOptionPane.showMessageDialog(null, "Welcome to the SC College Student Information Database");
+		//JOptionPane.showMessageDialog(null, "Welcome to the SC College Student Information Database");
+		JLabel title = new JLabel("Welcome to the SC College Student Information Database");
+		title.setBounds(50, 10, 400, 30);
 		
 		//display the options for the user
 		JFrame introFrame = new JFrame("SC College Student Information Database");
@@ -54,9 +56,25 @@ public class CollegeDatbase {
 			
 		JButton manuallyInsertInformation = new JButton("Manually Insert Student Data");
 			manuallyInsertInformation.setBounds(50, 90, 250, 30);;
+			manuallyInsertInformation.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					try {
+						insertInformation();
+					} catch (InstantiationException | IllegalAccessException | ClassNotFoundException
+							| FileNotFoundException | SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+				
+			});
+			
 		JButton showStudentData = new JButton("Show All Student Data");
 			showStudentData.setBounds(50, 130, 250, 30);
 		
+		introFrame.add(title);
 		introFrame.add(readFileOption);
 		introFrame.add(manuallyInsertInformation);
 		introFrame.add(showStudentData);
@@ -97,7 +115,6 @@ public class CollegeDatbase {
 		Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/studentdata","root","Mydata123");  
 		JOptionPane.showMessageDialog(null, "Connected to Database...");
 		Statement statement = con.createStatement();
-
 		
 		JOptionPane.showMessageDialog(null, "Looking for txt file to enter info into database");
 		//read file with the Student Information which should be the
@@ -106,10 +123,9 @@ public class CollegeDatbase {
 		
 		File inputFile = new File("src/info.txt");
 		Scanner reader = new Scanner(inputFile);
-		JOptionPane.showMessageDialog(null, "got file about to print");
+		//JOptionPane.showMessageDialog(null, "got file about to print");
 
 		while(reader.hasNext()) {
-			
 			String first = reader.next();
 			String last = reader.next(); 
 			String middle  = reader.next();
@@ -123,12 +139,133 @@ public class CollegeDatbase {
 						 "VALUES (" +  "'"+first+"'" + ", " + "'"+last+"'" + ", " + "'"+address+"'" + ", " +  "'"+major+"'" + ", " 
 								+ "'"+minor+"'" + ", " + "'"+id+"'" + ", " + "'"+middle+"'" + ", "+ "'"+email+"'"+ ")" + ";";
 			JOptionPane.showMessageDialog(null,sql);
-
 			statement.executeUpdate(sql);
 		}
 		con.close();
 		statement.close();
 		JOptionPane.showMessageDialog(null, "finished");
+	}
+	
+	private static void insertInformation () throws SQLException, InstantiationException, IllegalAccessException, 
+			ClassNotFoundException, FileNotFoundException{ 
+		
+		//create new window
+		JFrame manuallyInsert = new JFrame("Manually Insert Student Information");
+		JButton insertButton = new JButton("Insert");
+			insertButton.setBounds(30, 220, 120, 20);
+		JButton cancelButton = new JButton("Cancel");
+			cancelButton.setBounds(160, 220, 120, 20);
+			
+		
+		//firstName, lastName, address, major, minor, studentID, middleInitial, studentEmail
+		//adding labels
+		JLabel firstNameLabel = new JLabel("First Name : ");
+			firstNameLabel.setBounds(30, 50, 90, 30);
+			
+		JLabel lastNameLabel = new JLabel("Last Name: ");
+			lastNameLabel.setBounds(30, 70, 90, 30);
+			
+		JLabel milabel = new JLabel("M.I. :");
+			milabel.setBounds(30, 90, 90, 30);
+			
+		JLabel addressLabel = new JLabel("Address : ");
+			addressLabel.setBounds(30, 110, 90, 30);
+			
+		JLabel majorLabel = new JLabel("Major : ");
+			majorLabel.setBounds(30, 130, 90, 30);
+			
+		JLabel minorLabel = new JLabel("Minor : ");
+			minorLabel.setBounds(30, 150, 90, 30);
+			
+		JLabel studentIDLabel = new JLabel("StudentID : ");
+			studentIDLabel.setBounds(30, 170, 90, 30);
+			
+		JLabel emailLabel = new JLabel("Email : ");
+			emailLabel.setBounds(30, 190, 90, 30);
+		
+		//adding textfields
+		JTextField firstNameTf = new JTextField();
+			firstNameTf.setBounds(120, 55, 150, 20);
+			
+		JTextField lastNameTf = new JTextField();
+			lastNameTf.setBounds(120, 75, 150, 20);
+			
+		JTextField miTf = new JTextField();
+			miTf.setBounds(120, 95, 150, 20);
+			
+		JTextField addressTf = new JTextField();
+			addressTf.setBounds(120, 115, 150, 20);
+			
+		JTextField majorTf = new JTextField();
+			majorTf.setBounds(120, 135, 150, 20);
+	
+		JTextField minorTf = new JTextField();
+			minorTf.setBounds(120, 155, 150, 20);
+			
+		JTextField studentIDTf = new JTextField();
+			studentIDTf.setBounds(120, 175, 150, 20);
+			
+		JTextField emailTf = new JTextField();
+			emailTf.setBounds(120, 195, 150, 20);
+			
+		/*
+		 * ActionListener for the insert Button
+		 * **/
+		insertButton.addActionListener(new ActionListener(){
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					try {
+						Class.forName("com.mysql.jdbc.Driver");
+						Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/studentdata","root","Mydata123");
+						Statement statement = con.createStatement();
+						
+						String first = firstNameTf.getText();
+						String last = lastNameTf.getText();
+						String middle  = miTf.getText();
+						String address = addressTf.getText();
+						String major = majorTf.getText();
+						String minor = minorTf.getText();
+						String id = studentIDTf.getText();
+						String email = emailTf.getText();
+						String sql = "INSERT INTO studentinfo (firstName, lastName, address, major, minor, studentID, middleInitial, studentEmail) " + 
+								 "VALUES (" +  "'"+first+"'" + ", " + "'"+last+"'" + ", " + "'"+address+"'" + ", " +  "'"+major+"'" + ", " 
+										+ "'"+minor+"'" + ", " + "'"+id+"'" + ", " + "'"+middle+"'" + ", "+ "'"+email+"'"+ ")" + ";";
+						//JOptionPane.showMessageDialog(null,sql);
+						statement.executeUpdate(sql);
+						con.close();
+						statement.close();
+					} catch (ClassNotFoundException | SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			}); 
+		
+		manuallyInsert.add(firstNameLabel);
+		manuallyInsert.add(lastNameLabel);
+		manuallyInsert.add(milabel);
+		manuallyInsert.add(addressLabel);
+		manuallyInsert.add(majorLabel);
+		manuallyInsert.add(minorLabel);
+		manuallyInsert.add(studentIDLabel);
+		manuallyInsert.add(emailLabel);
+		
+		manuallyInsert.add(insertButton);
+		manuallyInsert.add(cancelButton);
+		
+		manuallyInsert.add(firstNameTf);
+		manuallyInsert.add(lastNameTf);
+		manuallyInsert.add(miTf);
+		manuallyInsert.add(addressTf);
+		manuallyInsert.add(majorTf);
+		manuallyInsert.add(minorTf);
+		manuallyInsert.add(studentIDTf);
+		manuallyInsert.add(emailTf);
+		
+		manuallyInsert.setSize(400, 400);
+		manuallyInsert.setLayout(null);
+		manuallyInsert.setVisible(true);
 	}
 	
 	
