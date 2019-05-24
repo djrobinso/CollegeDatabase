@@ -73,12 +73,26 @@ public class CollegeDatbase {
 			
 		JButton showStudentData = new JButton("Show All Student Data");
 			showStudentData.setBounds(50, 130, 250, 30);
-		
+			showStudentData.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					try {
+						showAllData();
+					} catch (InstantiationException | IllegalAccessException | ClassNotFoundException
+							| FileNotFoundException | SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+				
+			});
+			
 		introFrame.add(title);
 		introFrame.add(readFileOption);
 		introFrame.add(manuallyInsertInformation);
 		introFrame.add(showStudentData);
-		introFrame.setSize(500, 500);
+		introFrame.setSize(500, 300);
 		introFrame.setLayout(null);
 		introFrame.setVisible(true);
 		
@@ -100,9 +114,9 @@ public class CollegeDatbase {
 	public static String genereateEmail(String first, String middle, String last) {
 		String email="";
 		if(last.length() < 6){
-			email = first.substring(0) + middle.substring(0) + last.substring(0, last.length());
+			email = first.substring(0) + middle.substring(0) + last.substring(0, last.length()) + "@mit.edu";
 		}else {
-			email = first.substring(0) + middle.substring(0) + last.substring(0, 6);
+			email = first.substring(0) + middle.substring(0) + last.substring(0, 6) + "@mit.edu";
 		}
 		return email;
 	}
@@ -232,6 +246,7 @@ public class CollegeDatbase {
 								 "VALUES (" +  "'"+first+"'" + ", " + "'"+last+"'" + ", " + "'"+address+"'" + ", " +  "'"+major+"'" + ", " 
 										+ "'"+minor+"'" + ", " + "'"+id+"'" + ", " + "'"+middle+"'" + ", "+ "'"+email+"'"+ ")" + ";";
 						//JOptionPane.showMessageDialog(null,sql);
+						
 						statement.executeUpdate(sql);
 						con.close();
 						statement.close();
@@ -268,5 +283,39 @@ public class CollegeDatbase {
 		manuallyInsert.setVisible(true);
 	}
 	
+	private static void showAllData( ) throws SQLException, InstantiationException, IllegalAccessException, 
+			ClassNotFoundException, FileNotFoundException {
+		
+		Class.forName("com.mysql.jdbc.Driver");
+		Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/studentdata","root","Mydata123");
+		Statement statement = con.createStatement();
+		String displayedText = "";
+		String sql = "SELECT firstName, lastName, address, major, studentID, studentEmail FROM studentinfo" + ";";
+		ResultSet rs = statement.executeQuery(sql);
+		
+		while(rs.next()) {
+			
+			//get the data
+			String first = rs.getString("firstName");
+			String last = rs.getString("lastName");
+			String address = rs.getString("address");
+			String major = rs.getString("major");
+			String studentID = rs.getString("studentID");
+			String email = rs.getString("studentEmail");
+			
+			displayedText += "\n";
+			displayedText += "---------------------------------------------\n";
+			displayedText += "Name :  " + first + " " + last + "\n" ;
+			displayedText += "Address :  " + address + "\n";
+			displayedText += "Major: " + major + "\n";
+			displayedText += "Student ID: " + studentID + "\n";
+			displayedText += "Email :  " + email + "\n";
+
+		}
+		
+		//display the text
+		JOptionPane.showMessageDialog(null, displayedText);
+		
+	}
 	
 }
